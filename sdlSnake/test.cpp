@@ -19,14 +19,14 @@ snakeclass::snakeclass(int x, int y) {
 	playerCube.h = 20;
 
 	for(int i = 0; i < 5; i++)
-		snake.push_back(new snakepart(playerCube.x + i * 20, playerCube.y));
+		snake.push_back(snakepart(playerCube.x + i * 20, playerCube.y));
 	//points=0;
 
 	delay = 200;
 	get = false;
 	direction = 'l';
 	srand(time(0));
-	putfood(); //disabled until collision detection working
+	putfood();
 
 	Render();
 }
@@ -56,14 +56,14 @@ void snakeclass::putfood() {
 }
 
 bool snakeclass::collision() {
-	if(snake[0]->x == 0 || snake[0]->x == screenWidth - 20 || snake[0]->y == 0 || snake[0]->y == screenHeight - 20)
+	if(snake[0].x == 0 || snake[0].x == screenWidth - 20 || snake[0].y == 0 || snake[0].y == screenHeight - 20)
 		return 1;
 /*
 	for(unsigned long i = 2; i < snake.size(); i++)
 		if(snake[0].x == snake[i].x && snake[i].y == snake[0].y)
 			return true;
 	*/
-	if(snake[0]->x == food.x && snake[0]->y == food.y)
+	if(snake[0].x == food.x && snake[0].y == food.y)
 	{
 		get = true;
 		putfood();
@@ -110,23 +110,23 @@ void snakeclass::movesnake()
 	if(!get)
 	{
 		Render();
-		//snake.pop_back();
+		snake.pop_back();
 	}
 	
 
 	if(direction=='l')
 		//playerCube.x -= 20;
-		snake[0]->x -= 20;
-		//snake.insert(snake.begin(),snakepart(snake[0].x-20,snake[0].y));
+		//snake[0]->x -= 20;
+		snake.insert(snake.begin(), snakepart(snake[0].x - 20, snake[0].y));
 	else if(direction=='r')
-		snake[0]->x += 20;
-		//snake.insert(snake.begin(),snakepart(snake[0].x+1,snake[0].y));
+		//snake[0].x += 20;
+		snake.insert(snake.begin(),snakepart(snake[0].x + 20,snake[0].y));
 	else if(direction=='u')
-		snake[0]->y -= 20;
-		//snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y-1));
+		//snake[0].y -= 20;
+		snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y - 20));
 	else if(direction=='d')
-		snake[0]->y += 20;
-		//snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y+1));
+		//snake[0].y += 20;
+		snake.insert(snake.begin(),snakepart(snake[0].x, snake[0].y + 20));
 
 	Render();
 }
@@ -134,8 +134,6 @@ void snakeclass::movesnake()
 void snakeclass::Render() {
 	SDL_RenderClear(renderer);
 	// Clear the window and make it all green
-		
-	std::cout << "Im here" << std::endl;
 
 	//change colour for food
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -145,10 +143,8 @@ void snakeclass::Render() {
 // Change color to blue player
 	for (unsigned int i = 0; i < snake.size(); i++)
 	{
-		playerCube.x = snake[i]->x;
-		playerCube.y = snake[i]->y;
-
-		std::cout << playerCube.x << " " << playerCube.y << std::endl;
+		playerCube.x = snake[i].x;
+		playerCube.y = snake[i].y;
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 		// Render our "player"
 		SDL_RenderFillRect(renderer, &playerCube);

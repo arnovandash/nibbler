@@ -26,7 +26,7 @@ public:
 	bool            get;
 
     //snakepart       food;
-	std::vector<snakepart *> snake;
+	std::vector<snakepart > snake;
 
     SDL_Window*     window;
     SDL_Renderer*   renderer;
