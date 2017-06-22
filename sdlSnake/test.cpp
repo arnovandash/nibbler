@@ -63,8 +63,7 @@ bool snakeclass::collision() {
 		if(snake[0].x == snake[i].x && snake[i].y == snake[0].y)
 			return true;
 	*/
-	if(snake[0].x == food.x && snake[0].y == food.y)
-	{
+	if(snake[0].x == food.x && snake[0].y == food.y) {
 		get = true;
 		putfood();
 	}
@@ -74,13 +73,10 @@ bool snakeclass::collision() {
 	return false;
 }
 
-void snakeclass::movesnake()
-{
+void snakeclass::movesnake() {
 	SDL_Event event;
-	while(SDL_PollEvent(&event))
-	{
-		if(event.type == SDL_KEYDOWN)
-		{
+	while(SDL_PollEvent(&event)) {
+		if(event.type == SDL_KEYDOWN) {
 			switch(event.key.keysym.sym)
 			{
 				case SDLK_LEFT:
@@ -107,25 +103,19 @@ void snakeclass::movesnake()
 		else if(event.type == SDL_QUIT)
 			direction='q';
 	}
-	if(!get)
-	{
+	if(!get) {
 		Render();
 		snake.pop_back();
 	}
 	
 
 	if(direction=='l')
-		//playerCube.x -= 20;
-		//snake[0]->x -= 20;
 		snake.insert(snake.begin(), snakepart(snake[0].x - 20, snake[0].y));
 	else if(direction=='r')
-		//snake[0].x += 20;
 		snake.insert(snake.begin(),snakepart(snake[0].x + 20,snake[0].y));
 	else if(direction=='u')
-		//snake[0].y -= 20;
 		snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y - 20));
 	else if(direction=='d')
-		//snake[0].y += 20;
 		snake.insert(snake.begin(),snakepart(snake[0].x, snake[0].y + 20));
 
 	Render();
@@ -133,35 +123,25 @@ void snakeclass::movesnake()
 
 void snakeclass::Render() {
 	SDL_RenderClear(renderer);
-	// Clear the window and make it all green
-
-	//change colour for food
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	// Render our "player"
 	SDL_RenderFillRect(renderer, &food);
-
-// Change color to blue player
-	for (unsigned int i = 0; i < snake.size(); i++)
-	{
+	for (unsigned int i = 0; i < snake.size(); i++) {
 		playerCube.x = snake[i].x;
 		playerCube.y = snake[i].y;
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-		// Render our "player"
 		SDL_RenderFillRect(renderer, &playerCube);
-		// Change color to green
 	}
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-	// Render the changes above
 	SDL_RenderPresent(renderer);
 	
 }
 
 bool snakeclass::InitEverything() {
-	if ( !InitSDL() )
+	if (!InitSDL())
 		return false;
-	if ( !CreateWindow() )
+	if (!CreateWindow())
 		return false;
-	if ( !CreateRenderer() )
+	if (!CreateRenderer())
 		return false;
 	SetupRenderer();
 
@@ -200,15 +180,13 @@ bool snakeclass::CreateRenderer() {
 void snakeclass::SetupRenderer() {
 	// Set size of renderer to the same as window
 	SDL_RenderSetLogicalSize( renderer, screenWidth, screenHeight );
-	// Set color of renderer to green
 	SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
 }
 
 void snakeclass::RunGame() {
 	bool loop = true;
 
-	while(loop) 
-	{
+	while(loop) {
 		if(collision()) {
 			std::cout << "game over" << std::endl;
 			break;

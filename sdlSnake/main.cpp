@@ -9,8 +9,7 @@ int main( void ) {
     s.screenWidth = 640;
     s.screenHeight = 480;
 
-	if (!s.InitEverything()){
-
+	if (!s.InitEverything()) {
 		std::cout << "Not initialised" << std::endl;
 		return -1;
 	}
@@ -18,5 +17,4 @@ int main( void ) {
 	s.RunGame();
 	return 0;
 
-	
 }
