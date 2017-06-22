@@ -3,6 +3,6 @@
 int main()
 {
 	snakeclass s;
-	s.start();
+	s.RunGame();
 	return 0;
 }

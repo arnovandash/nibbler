@@ -1,29 +1,34 @@
-#include <iostream>
-#include <vector>
-#include <ncurses.h>
-#include <cstdlib>
 #ifndef SNAKE_HPP
 #define SNAKE_HPP
+
+#include <ncurses.h>
+
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+
 struct snakepart{
-	int x,y;
+	int x;
+	int y;
 	snakepart(int col, int row);
 	snakepart();
 };
 
 class snakeclass{
-	int points,del;
-	//indicates that the snake get food (it makes the snake longer)
-	bool get;
-	//indicates the current direction of the snake
-	char direction;
+	
+	int 		score;
+	int			delay;
+	bool 		eat;
+	char 		direction;
+	int 		screenWidth;
+	int 		screenHeight;
 
-	int maxwidth;
-	int maxheight;
-	char partchar;
-	char oldalchar;
-	char etel;
-	snakepart food;
-	std::vector<snakepart> snake; //represent the snake
+	snakepart 	food;
+	std::vector<snakepart> snake;
+
+	char 		partchar;
+	char 		wall;
+	char 		lunch;
 
 	void putfood();
 	bool collision();
@@ -32,7 +37,8 @@ class snakeclass{
 	public:
 	snakeclass();
 	~snakeclass();
-	void start();
+
+	void RunGame();
 };
 
 #endif

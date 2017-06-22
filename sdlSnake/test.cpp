@@ -20,10 +20,10 @@ snakeclass::snakeclass(int x, int y) {
 
 	for(int i = 0; i < 5; i++)
 		snake.push_back(snakepart(playerCube.x + i * 20, playerCube.y));
-	//points=0;
+	//score=0;
 
 	delay = 200;
-	get = false;
+	eat = false;
 	direction = 'l';
 	srand(time(0));
 	putfood();
@@ -56,7 +56,7 @@ void snakeclass::putfood() {
 }
 
 bool snakeclass::collision() {
-	if(snake[0].x == 0 || snake[0].x == screenWidth - 20 || snake[0].y == 0 || snake[0].y == screenHeight - 20)
+	if(snake[0].x < 0 || snake[0].x == screenWidth || snake[0].y < 0 || snake[0].y == screenHeight)
 		return 1;
 /*
 	for(unsigned long i = 2; i < snake.size(); i++)
@@ -64,12 +64,12 @@ bool snakeclass::collision() {
 			return true;
 	*/
 	if(snake[0].x == food.x && snake[0].y == food.y) {
-		get = true;
+		eat = true;
 		putfood();
 	}
 	
 	else
-		get=false;
+		eat =false;
 	return false;
 }
 
@@ -103,7 +103,7 @@ void snakeclass::movesnake() {
 		else if(event.type == SDL_QUIT)
 			direction='q';
 	}
-	if(!get) {
+	if(!eat) {
 		Render();
 		snake.pop_back();
 	}

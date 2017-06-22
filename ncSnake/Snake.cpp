@@ -21,43 +21,43 @@ snakeclass::snakeclass()
 	keypad(stdscr,true);                    //init the keyboard
 	noecho();                                                                       //don't write
 	curs_set(0);                                                    //cursor invisible
-	getmaxyx(stdscr,maxheight,maxwidth);
+	getmaxyx(stdscr,screenHeight,screenWidth);
 	partchar='x';
-	oldalchar=(char)219;
-	etel='*';
+	wall=(char)219;
+	lunch='*';
 	food.x=0;
 	food.y=0;
 	for(int i=0;i<5;i++)
 		snake.push_back(snakepart(40+i,10));
-	points=0;
-	del=110000;
-	get=0;
+	score=0;
+	delay=110000;
+	eat=0;
 	direction='l';
 	srand(time(NULL));
 	putfood();
 	//make the game-board -- up-vertical
-	for(int i=0;i<maxwidth-1;i++)
+	for(int i=0;i<screenWidth-1;i++)
 	{
 		move(0,i);
-		addch(oldalchar);
+		addch(wall);
 	}
 	//left-horizontal
-	for(int i=0;i<maxheight-1;i++)
+	for(int i=0;i<screenHeight-1;i++)
 	{
 		move(i,0);
-		addch(oldalchar);
+		addch(wall);
 	}
 	//down-vertical
-	for(int i=0;i<maxwidth-1;i++)
+	for(int i=0;i<screenWidth-1;i++)
 	{
-		move(maxheight-2,i);
-		addch(oldalchar);
+		move(screenHeight-2,i);
+		addch(wall);
 	}
 	//right-horizontal
-	for(int i=0;i<maxheight-1;i++)
+	for(int i=0;i<screenHeight-1;i++)
 	{
-		move(i,maxwidth-2);
-		addch(oldalchar);
+		move(i,screenWidth-2);
+		addch(wall);
 	}
 	//draw the snake
 	for(unsigned long i=0; i<snake.size(); i++)
@@ -65,10 +65,10 @@ snakeclass::snakeclass()
 		move(snake[i].y,snake[i].x);
 		addch(partchar);
 	}
-	move(maxheight-1,0);
-	printw("%d",points);
+	move(screenHeight-1,0);
+	printw("%d",score);
 	move(food.y,food.x);
-	addch(etel);
+	addch(lunch);
 	refresh();
 }
 
@@ -83,25 +83,25 @@ void snakeclass::putfood()
 {
 	while(1)
 	{
-		int tmpx=rand()%maxwidth+1;
-		int tmpy=rand()%maxheight+1;
+		int tmpx=rand()%screenWidth+1;
+		int tmpy=rand()%screenHeight+1;
 		for(unsigned long i=0;i<snake.size();i++)
 			if(snake[i].x==tmpx && snake[i].y==tmpy)
 				continue;
-		if(tmpx>=maxwidth-2 || tmpy>=maxheight-3)
+		if(tmpx>=screenWidth-2 || tmpy>=screenHeight-3)
 			continue;
 		food.x=tmpx;
 		food.y=tmpy;
 		break;
 	}
 	move(food.y,food.x);
-	addch(etel);
+	addch(lunch);
 	refresh();
 }
 
 bool snakeclass::collision()
 {
-	if(snake[0].x==0 || snake[0].x==maxwidth-1 || snake[0].y==0 || snake[0].y==maxheight-2)
+	if(snake[0].x==0 || snake[0].x==screenWidth-1 || snake[0].y==0 || snake[0].y==screenHeight-2)
 		return true;
 	for(unsigned long i=2;i<snake.size();i++)
 	{
@@ -111,15 +111,15 @@ bool snakeclass::collision()
 	//collision with the food
 	if(snake[0].x==food.x && snake[0].y==food.y)
 	{
-		get=true;
+		eat=true;
 		putfood();
-		points+=10;
-		move(maxheight-1,0);
-		printw("%d",points);
-		if((points%100)==0)
-			del-=10000;
+		score+=10;
+		move(screenHeight-1,0);
+		printw("%d",score);
+		if((score%100)==0)
+			delay-=10000;
 	}else
-		get=false;
+		eat=false;
 	return false;
 }
 
@@ -151,7 +151,7 @@ void snakeclass::movesnake()
 			break;
 	}
 	//if there wasn't a collision with food
-	if(!get)
+	if(!eat)
 	{
 		move(snake[snake.size()-1].y,snake[snake.size()-1].x);
 		printw(" ");
@@ -174,7 +174,7 @@ void snakeclass::movesnake()
 	refresh();
 }
 
-void snakeclass::start()
+void snakeclass::RunGame()
 {
 	while(1)
 	{
@@ -187,6 +187,6 @@ void snakeclass::start()
 		movesnake();
 		if(direction=='q')                              //exit
 			break;
-		usleep(del);                    //Linux delay
+		usleep(delay);                    //Linux delay
 	}
 }
