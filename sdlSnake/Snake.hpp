@@ -1,49 +1,63 @@
+#ifndef TEST_HPP
+#define TEST_HPP
+
+#include <SDL2/SDL.h>
+
 #include <iostream>
 #include <vector>
 #include <cstdlib>
-#include <SDL2/SDL.h>
-//#include <SDL/SDL_ttf.h>
-#ifndef SNAKE_HPP
-#define SNAKE_HPP
+
+///// same between both /////
 
 struct snakepart{
-	int x,y;
+	int     x;
+    int     y;
 	snakepart(int col,int row);
 	snakepart();
 };
+/////////////////////////////
 
-class snakeclass{
-	int points,del,width,height;
-	char direction;
-	bool get;
-	snakepart food;
-	std::vector<snakepart> snake;
-	//SDL_Surface* screen; //sdl1.2
-	//SDL_Window * screen;
-//	TTF_Font* font;
+class snakeclass {
 
-	void drawRect(int x,int y,Uint32 color,int w=10,int h=10);
-	void putfood();
-	bool collision();
-	void movesnake();
-	public:
-	snakeclass();
+public:
+
+    int             score;
+    int             delay;
+    bool            eat;
+    char            direction;
+    int             screenWidth;
+    int             screenHeight;
+
+    SDL_Rect        food;
+    std::vector<snakepart> snake;
+
+    int             posX;
+    int             posY;
+
+    SDL_Window*     window;
+    SDL_Renderer*   renderer;
+    SDL_Rect        playerCube;
+    
+
+    bool            InitEverything();
+    bool            InitSDL();
+    bool            CreateWindow();
+    bool            CreateRenderer();
+    void            SetupRenderer();
+    void            Render();
+
+    void            putfood();
+	bool            collision();
+	void            movesnake();
+
+
+
+    snakeclass();
+    snakeclass(int x, int y);
 	~snakeclass();
-	void start();
 
-	///////////////////TESTING///////////////////
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	SDL_Rect playerPos;
+    void RunGame();
 
-	bool InitEverything();
-	bool InitSDL();
-	bool CreateWindow();
-	bool CreateRenderer();
-	void SetupRenderer();
-
-	void Render();
-	void RunGame();
 };
 
 #endif

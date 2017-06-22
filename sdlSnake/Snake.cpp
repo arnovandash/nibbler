@@ -1,119 +1,91 @@
-#include "Snake.hpp"
+#include "test.hpp"
 
-void snakeclass::drawRect(int x,int y,Uint32 color,int w,int h)
-{
-	SDL_Rect tmp = {x,y,w,h};
-	SDL_FillRect(screen,&tmp,color);
+snakepart::snakepart(int col, int row) {
+	x = col;
+	y = row;
 }
 
-
-snakepart::snakepart(int col,int row)
-{
-	x=col;
-	y=row;
+snakepart::snakepart() {
+	x = 0;
+	y = 0;
 }
 
-snakepart::snakepart()
-{
-	x=0;
-	y=0;
-}
+snakeclass::snakeclass(int x, int y) {
+	
 
-snakeclass::snakeclass()
-{
-	width=800;
-	height=400;
-	SDL_Init(SDL_INIT_EVERYTHING);
-	//TTF_Init();
-	//font=TTF_OpenFont("air.ttf",20);
-	//screen=SDL_SetVideoMode(width,height,32,SDL_SWSURFACE); //sdl1.2
-	screen = SDL_CreateWindow("My Game Window",
-                          SDL_WINDOWPOS_UNDEFINED,
-                          SDL_WINDOWPOS_UNDEFINED,
-                          width, height,
-                          SDL_WINDOW_SHOWN);
+	playerCube.x = x;
+	playerCube.y = y;
+	playerCube.w = 20;
+	playerCube.h = 20;
 
-	for(int i=0;i<5;i++)
-		snake.push_back(snakepart(40+i,10));
-	points=0;
-	del=110;
-	get=false;
-	direction='l';
+	for(int i = 0; i < 5; i++)
+		snake.push_back(snakepart(playerCube.x + i * 20, playerCube.y));
+	//score=0;
+
+	delay = 110;
+	eat = false;
+	direction = 'l';
 	srand(time(0));
 	putfood();
-	//put the edges
-	drawRect(0,0,SDL_MapRGB(screen->format,0xff,0x00,0x00),width,10);
-	drawRect(0,0,SDL_MapRGB(screen->format,0xff,0x00,0x00),10,height-20);
-	drawRect(0,height-30,SDL_MapRGB(screen->format,0xff,0x00,0x00),width,10);
-	drawRect(width-10,0,SDL_MapRGB(screen->format,0xff,0x00,0x00),10,height-20);
-	//draw the snake*/
-	for(int i=0;i<snake.size();i++)
-	{
-		drawRect(snake[i].x*10,snake[i].y*10,SDL_MapRGB(screen->format,0x00,0xff,0x00));
-	}
+
+	Render();
 }
-snakeclass::~snakeclass()
-{
-	//TTF_CloseFont(font);
-//	TTF_Quit();
+
+snakeclass::~snakeclass() {
 	SDL_Quit();
 }
 
-void snakeclass::putfood()
-{
-	while(1)
-	{
-		int tmpx=rand()%width/10+1;
-		int tmpy=rand()%height/10+1;
-		for(int i=0;i<snake.size();i++)
-			if(snake[i].x==tmpx && snake[i].y==tmpy)
+void snakeclass::putfood() {
+	while(1) {
+		int tmpx = (rand() % (screenWidth / 20)) * 20;
+		int tmpy = (rand() % (screenHeight / 20)) * 20;
+
+		for(unsigned long i = 0; i < snake.size(); i++)
+			if(snake[i].x == tmpx && snake[i].y == tmpy)
 				continue;
-		if(tmpx>=width/10-2 || tmpy>=height/10-3)
+				
+		if(tmpx >= screenWidth || tmpy >= screenHeight)
 			continue;
-		food.x=tmpx;
-		food.y=tmpy;
+		food.x = tmpx;
+		food.y = tmpy;
+		food.w = 20;
+		food.h = 20;
 		break;
 	}
-	drawRect(food.x*10,food.y*10,SDL_MapRGB(screen->format,0xff,0x00,0xff));
+	Render();
 }
 
-bool snakeclass::collision()
-{
-	if(snake[0].x==0 || snake[0].x==width/10-1 || snake[0].y==0 || snake[0].y==height/10-3)
-		return 1;
+bool snakeclass::collision() {
+	if(snake[0].x < 0 || snake[0].x == screenWidth || snake[0].y < 0 || snake[0].y == screenHeight)
+		return true;
 
-	for(int i=2;i<snake.size();i++)
-		if(snake[0].x==snake[i].x && snake[i].y==snake[0].y)
+	for(unsigned long i = 2; i < snake.size(); i++)
+		if(snake[0].x == snake[i].x && snake[i].y == snake[0].y)
 			return true;
-	if(snake[0].x==food.x && snake[0].y==food.y)
-	{
-		get=true;
+	
+	if(snake[0].x == food.x && snake[0].y == food.y) {
+		eat = true;
 		putfood();
-		points+=10;
-		char c[5];
-		sprintf(c,"%d",points);
-		SDL_Surface* text;
-		SDL_Color color = {255,255,255};
-		//text=TTF_RenderText_Solid(font,c,color);
-		//SDL_Rect tmp = {0,380};
-		//drawRect(0,380,SDL_MapRGB(screen->format,0x00,0x00,0x00),100,20);
-		//SDL_BlitSurface(text,NULL,screen,&tmp);
-		SDL_FreeSurface(text);
-		if((points%100)==0 && del>0)
-			del-=10;
-	}else
-		get=false;
+		score += 10;
+
+		/* make equivilent
+
+		move(screenHeight-1,0);
+		printw("%d",score);
+		*/
+		if((score % 100) == 0)
+			delay -= 10;
+	}
+	
+	else
+		eat = false;
 	return false;
 }
 
-void snakeclass::movesnake()
-{
+void snakeclass::movesnake() {
 	SDL_Event event;
-	while(SDL_PollEvent(&event))
-	{
-		if(event.type == SDL_TEXTINPUT)
-		//if(event.type == SDL_KEYDOWN)
-		{
+	while(SDL_PollEvent(&event)) {
+		if(event.type == SDL_KEYDOWN) {
 			switch(event.key.keysym.sym)
 			{
 				case SDLK_LEFT:
@@ -121,7 +93,7 @@ void snakeclass::movesnake()
 						direction='l';
 					break;
 				case SDLK_UP:
-					if(direction =='d')
+					if(direction !='d')
 						direction ='u';
 					break;
 				case SDLK_DOWN:
@@ -136,39 +108,100 @@ void snakeclass::movesnake()
 					direction = 'q';
 					break;
 			}
-		}else if(event.type == SDL_QUIT)
+		}
+		else if(event.type == SDL_QUIT)
 			direction='q';
 	}
-	if(!get)
-	{
-		drawRect(snake[snake.size()-1].x*10,snake[snake.size()-1].y*10,SDL_MapRGB(screen->format,0x00,0x00,0x00));
+	if(!eat) {
+		Render();
 		snake.pop_back();
 	}
+	
+
 	if(direction=='l')
-		snake.insert(snake.begin(),snakepart(snake[0].x-1,snake[0].y));
+		snake.insert(snake.begin(), snakepart(snake[0].x - 20, snake[0].y));
 	else if(direction=='r')
-		snake.insert(snake.begin(),snakepart(snake[0].x+1,snake[0].y));
+		snake.insert(snake.begin(),snakepart(snake[0].x + 20,snake[0].y));
 	else if(direction=='u')
-		snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y-1));
+		snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y - 20));
 	else if(direction=='d')
-		snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y+1));
-	drawRect(snake[0].x*10,snake[0].y*10,SDL_MapRGB(screen->format,0x00,0xff,0x00));
+		snake.insert(snake.begin(),snakepart(snake[0].x, snake[0].y + 20));
+
+	Render();
 }
 
+void snakeclass::Render() {
+	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderFillRect(renderer, &food);
+	for (unsigned int i = 0; i < snake.size(); i++) {
+		playerCube.x = snake[i].x;
+		playerCube.y = snake[i].y;
+		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+		SDL_RenderFillRect(renderer, &playerCube);
+	}
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_RenderPresent(renderer);
+	
+}
 
-void snakeclass::start()
-{
-	while(1)
-	{
-		if(collision())
-		{
+bool snakeclass::InitEverything() {
+	if (!InitSDL())
+		return false;
+	if (!CreateWindow())
+		return false;
+	if (!CreateRenderer())
+		return false;
+	SetupRenderer();
+
+	putfood();
+	return true;
+}
+
+bool snakeclass::InitSDL() {
+	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 ) {
+		std::cout << " Failed to initialize SDL : " << SDL_GetError() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+bool snakeclass::CreateWindow() {
+	window = SDL_CreateWindow( "Server", posX, posY, screenWidth, screenHeight, 0 );
+
+	if ( window == nullptr ) {
+		std::cout << "Failed to create window : " << SDL_GetError();
+		return false;
+	}
+	return true;
+}
+
+bool snakeclass::CreateRenderer() {
+	renderer = SDL_CreateRenderer( window, -1, 0 );
+
+	if ( renderer == nullptr ) {
+		std::cout << "Failed to create renderer : " << SDL_GetError();
+		return false;
+	}
+	return true;
+}
+
+void snakeclass::SetupRenderer() {
+	SDL_RenderSetLogicalSize( renderer, screenWidth, screenHeight );
+	SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
+}
+
+void snakeclass::RunGame() {
+	bool loop = true;
+
+	while(loop) {
+		if(collision()) {
 			std::cout << "game over" << std::endl;
 			break;
 		}
 		movesnake();
-		if(direction=='q')
+		if(direction == 'q')
 			break;
-		SDL_Flip(screen);
-		SDL_Delay(del);
+		SDL_Delay(delay);
 	}
 }
