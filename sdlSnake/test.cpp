@@ -22,7 +22,7 @@ snakeclass::snakeclass(int x, int y) {
 		snake.push_back(snakepart(playerCube.x + i * 20, playerCube.y));
 	//score=0;
 
-	delay = 200;
+	delay = 110;
 	eat = false;
 	direction = 'l';
 	srand(time(0));
@@ -39,11 +39,11 @@ void snakeclass::putfood() {
 	while(1) {
 		int tmpx = (rand() % (screenWidth / 20)) * 20;
 		int tmpy = (rand() % (screenHeight / 20)) * 20;
-/*
+
 		for(unsigned long i = 0; i < snake.size(); i++)
 			if(snake[i].x == tmpx && snake[i].y == tmpy)
 				continue;
-*/				
+				
 		if(tmpx >= screenWidth || tmpy >= screenHeight)
 			continue;
 		food.x = tmpx;
@@ -52,24 +52,33 @@ void snakeclass::putfood() {
 		food.h = 20;
 		break;
 	}
-	Render(); //need to pass coordinates to render function
+	Render();
 }
 
 bool snakeclass::collision() {
 	if(snake[0].x < 0 || snake[0].x == screenWidth || snake[0].y < 0 || snake[0].y == screenHeight)
-		return 1;
-/*
+		return true;
+
 	for(unsigned long i = 2; i < snake.size(); i++)
 		if(snake[0].x == snake[i].x && snake[i].y == snake[0].y)
 			return true;
-	*/
+	
 	if(snake[0].x == food.x && snake[0].y == food.y) {
 		eat = true;
 		putfood();
+		score += 10;
+
+		/* make equivilent
+
+		move(screenHeight-1,0);
+		printw("%d",score);
+		*/
+		if((score % 100) == 0)
+			delay -= 10;
 	}
 	
 	else
-		eat =false;
+		eat = false;
 	return false;
 }
 
@@ -178,7 +187,6 @@ bool snakeclass::CreateRenderer() {
 }
 
 void snakeclass::SetupRenderer() {
-	// Set size of renderer to the same as window
 	SDL_RenderSetLogicalSize( renderer, screenWidth, screenHeight );
 	SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
 }
