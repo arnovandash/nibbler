@@ -1,4 +1,4 @@
-#include "test.hpp"
+#include "Snake.hpp"
 
 int main( void ) {
 	

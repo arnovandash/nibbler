@@ -1,5 +1,5 @@
-#ifndef TEST_HPP
-#define TEST_HPP
+#ifndef SNAKE_HPP
+#define SNAKE_HPP
 
 #include <SDL2/SDL.h>
 

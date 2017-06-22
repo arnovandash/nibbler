@@ -1,4 +1,4 @@
-#include "test.hpp"
+#include "Snake.hpp"
 
 snakepart::snakepart(int col, int row) {
 	x = col;
