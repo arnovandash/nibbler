@@ -11,7 +11,7 @@ class dynamic_libs
         // virtual int     Input(int &dir, int &lib);
 
         virtual bool    Init() = 0;
-        virtual void    Render() = 0;
+        virtual int    Render() = 0;
         virtual int     Input(int &lib) = 0;
 };
 

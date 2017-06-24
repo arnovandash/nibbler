@@ -46,14 +46,28 @@ bool	ncurses::Init() {
 	return (false);
 }
 
-void ncurses::Render()
+int ncurses::Render()
 {
+	int key = getch();
+	std::cout << "Running.. " << std::endl;
+	switch(key)
+	{
+		case 50:// "2" switch lib
+			return (6);
+			break;
+		case 51:// "3" switch lib
+			return (7);
+			break;
+		case 27: // "ESC" quit
+			return (8);
+			break;
+	}
+	return (0);
 }
 
 int ncurses::Input(int &lib)
 {
 	int tmp = getch();
-	std::cout << tmp << std::endl;
 	switch(tmp)
 	{
 		case 49:

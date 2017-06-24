@@ -46,8 +46,8 @@ Game &Game::operator=(Game const &src) {
 void Game::initialise()
 {
 	current_lib = 5;
-//	load_lib("ncLib/ncLib.so");
-	load_lib("sdlLib/sdlLib.so");
+	load_lib("ncLib/ncLib.so");
+//	load_lib("sdlLib/sdlLib.so");
 }
 
 void Game::change_lib(int &ret_tmp) {
@@ -61,10 +61,10 @@ void Game::change_lib(int &ret_tmp) {
 	switch (current_lib)
 	{
 		case 5:
-			load_lib("ncLib/ncurses.so");
+			load_lib("ncLib/ncLib.so");
 			break ;
 		case 6:
-//			load_lib(PATH_SDL);
+			load_lib("sdlLib/sdlLib.so");
 			break ;
 		case 7:
 			break ;
@@ -76,19 +76,38 @@ void Game::change_lib(int &ret_tmp) {
 }
 
 void Game::RunGame() {
-//	gameRun = true;
-//	while (gameRun) {
-//		if (gameRun == true)
-{
-//			std::cout << "hello" << std::endl;
-			lib->Render();
-}
+	int key = 0;
+	gameRun = true;
+	while (gameRun) {
+		key = lib->Render();
+		parseKey(key);
 		usleep(70000);
-//	}
+	}
 
 	if(!lib_closed)
 		close_lib();
 }
+
+void Game::parseKey(int key) {	//movesnake
+	switch (key)
+	{
+		case 5:
+			close_lib();
+			load_lib("ncLib/ncLib.so");
+			break ;
+		case 6:
+			close_lib();
+			load_lib("sdlLib/sdlLib.so");
+			break;
+		case 8:// TODO CLOSE CLEANLY
+			close_lib();
+	}
+	//set direction
+
+	//quit
+
+}
+
 
 void Game::load_lib(std::string const &lib_path) {
 	GLibHandler = dlopen(lib_path.c_str(), RTLD_LAZY);
@@ -100,7 +119,8 @@ void Game::load_lib(std::string const &lib_path) {
 	create_t* create_lib = (create_t *) dlsym(GLibHandler, "create");
 
 	const char* dlsym_error = dlerror();
-	if (dlsym_error)
+	if (dlsym_error
+	   )
 		throw (dlsym_error);
 
 	// create an instance of the class

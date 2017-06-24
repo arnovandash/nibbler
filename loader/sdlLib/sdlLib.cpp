@@ -25,6 +25,7 @@ sdl::sdl(sdl const &src) {
 }
 
 sdl::~sdl() {
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
@@ -38,12 +39,16 @@ sdl &sdl::operator=(sdl const &src)
 
 bool	sdl::Init() {
 
-////////////// Remove ///////////////
-	unsigned int posX = 50;
-	unsigned int posY = 50;
-	unsigned int screenWidth = 100;
-	unsigned int screenHeight = 100;
-///////////////////////////////////////
+
+	/////////////tmp////////////
+
+	int	posX = 10;
+	int	posY = 10;
+	int	screenWidth = 300;
+	int	screenHeight = 300;
+
+	////////////////////////////////
+
 
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 ) {
 		std::cout << " Failed to initialize SDL : " << SDL_GetError() << std::endl;
@@ -61,32 +66,74 @@ bool	sdl::Init() {
 		std::cout << "Failed to create renderer : " << SDL_GetError();
 		return false;
 	}
-//	SDL_RenderSetLogicalSize( renderer, screenWidth, screenHeight );
+	//	SDL_RenderSetLogicalSize( renderer, screenWidth, screenHeight );
 	SDL_RenderSetLogicalSize( renderer, 30, 30 );
 	SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
-	SDL_Delay(3000);
 	return (false);
 }
 
-/*
-bool	sdl::Init() {
-	initscr();
-	raw();
-	keypad(stdscr, TRUE);
-	noecho();
-	nodelay(stdscr, TRUE);
-	curs_set(FALSE);
-	return (false);
-}
-*/
-void sdl::Render()
+int sdl::Render()
 {
+	//	int key = getch();
+	std::cout << "Running.. " << std::endl;
+
+
+	SDL_Event event;
+	while(SDL_PollEvent(&event)) {
+		if(event.type == SDL_KEYDOWN) {
+			switch(event.key.keysym.sym)
+			{
+				case SDLK_LEFT:
+					//	if(direction != 'r')
+					//		direction='l';
+					break;
+				case SDLK_UP:
+					//	if(direction !='d')
+					//		direction ='u';
+					break;
+				case SDLK_DOWN:
+					//	if(direction != 'u')
+					//		direction='d';
+					break;
+				case SDLK_RIGHT:
+					//	if(direction != 'l')
+					//		direction='r';
+					break;
+				case SDLK_1:
+					return(5);
+					break;
+				case SDLK_ESCAPE:
+					return(8);
+					break;
+			}
+		}
+		else if(event.type == SDL_QUIT)
+			return(8);
+	}
+
+	/*
+	   switch(key)
+	   {
+	   case 50:// "2" switch lib
+	   return (6);
+	   break;
+	   case 51:// "3" switch lib
+	   return (7);
+	   break;
+	   case 27: // "ESC" quit
+	   return (8);
+	   break;
+	   }
+	 */
+	return (0);
 }
 
 int sdl::Input(int &lib)
 {
-	int tmp =5;// getch();
-	std::cout << tmp << std::endl;
+			if (lib != 7)
+				return (7);
+/*
+	//	int tmp = getch();
 	switch(tmp)
 	{
 		case 49:
@@ -106,6 +153,7 @@ int sdl::Input(int &lib)
 		case 32:
 			return (9);
 	}
+*/
 	return (0);
 }
 

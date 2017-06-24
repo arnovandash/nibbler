@@ -32,7 +32,7 @@ class sdl : public dynamic_libs {
 		sdl &operator=(sdl const &src);
 
 		bool		Init();
-		void    	Render();
+		int    	Render();
 		int    	Input(int &lib);
 };
 

@@ -14,9 +14,9 @@ class ncurses : public dynamic_libs {
 
 
 		int 			max_width;
-        int 			max_height;
-        int 			stdscr_x;
-        int 			stdscr_y;
+		int 			max_height;
+		int 			stdscr_x;
+		int 			stdscr_y;
 
 	public:
 
@@ -28,8 +28,8 @@ class ncurses : public dynamic_libs {
 		ncurses &operator=(ncurses const &src);
 
 		bool		Init();
-		void    	Render();
-        int    	Input(int &lib);
+		int    	Render();
+		int    	Input(int &lib);
 };
 
 #endif
