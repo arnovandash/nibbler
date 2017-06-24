@@ -41,7 +41,7 @@ ncurses &ncurses::operator=(ncurses const &src)
 bool	ncurses::Init(unsigned int &maxX,unsigned int &maxY) {
 	
 	initscr();
-    getmaxyx(stdscr, max_y, max_x);
+    getmaxyx(stdscr, max_height, max_width);
 
     if (stdscr_y < 40 || stdscr_x < 40)
         mvprintw(stdscr_y / 2, (stdscr_x / 2) - 15,"Please enlarge terminal window: Too small");
@@ -180,7 +180,7 @@ void ncurses::Render(char **map, unsigned int &score, bool &pause)
 // 	return false;
 // }
 
-char ncurses::input(char &direction, char &lib)
+int ncurses::Input(char &direction, int &lib)
 {
 	int tmp = getch();
 	switch(tmp)
@@ -227,7 +227,7 @@ char ncurses::input(char &direction, char &lib)
         case 32:
             return (9);
 	}
-    return (dir);
+    return (direction);
 }
 // void snakeclass::movesnake() {
 

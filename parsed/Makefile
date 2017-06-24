@@ -20,7 +20,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER)
-	make -C ./ncurses/
+	make -C ./ncLib/
 
 	$(CLANG) $(CFLAGS) $(C++_TYPE) -Qunused-arguments -o $(NAME) $(OBJ) -ldl
 
@@ -31,15 +31,15 @@ fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
-	make -C ./ncurses/ re
+	make -C ./ncLib/ re
 
 
 libs:
-	make -C ./ncurses/
+	make -C ./ncLib/
 
 
 lib_clean:
-	make -C ./ncurses/ fclean
+	make -C ./ncuLib/ fclean
 
 
 c_e: fclean lib_clean

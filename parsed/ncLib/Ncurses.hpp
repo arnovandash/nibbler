@@ -6,15 +6,15 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
-#include "libs.hpp"
+#include "../inc/libs.hpp"
 
-class ncurses : public dynamic_libs
+class ncurses : public dynamic_libs {
 
 	private:
 
-		char 			partchar;
-		char 			wall;
-		char 			lunch;
+		// char 			partchar;
+		// char 			wall;
+		// char 			lunch;
 
 		int 			max_width;
         int 			max_height;
@@ -30,13 +30,14 @@ class ncurses : public dynamic_libs
 
 		ncurses &operator=(ncurses const &src);
 
-		void		Init(unsigned int &maxX, unsigned int &maxY);
+		bool		Init(unsigned int &maxX, unsigned int &maxY);
 		// void 		Render(char **map, unsigned int &score, bool &pause);
 		// int 		Input(int &dir, int &lib);
 
 		// void    Init();
-        void    Render();
-        int    	Input(int &dir, int &lib);
+		void    	Render(char **map, unsigned int &score, bool &pause);
+        //void    Render();
+        int    	Input(char &direction, int &lib);
 };
 
 #endif

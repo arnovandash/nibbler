@@ -124,19 +124,14 @@ void Game::putfood()
 }
 
 void Game::mapSymbols() {
-    int tmp_x = 0;
-    int tmp_y = 0;
+    // int tmp_x = 0;
+    // int tmp_y = 0;
 
     if (food.x != 0 && food.y != 0)
         map[food.y][food.x] = '*';
 
     for (unsigned int i = 0; i < snake.size(); i++) {
-        tmp_x = snake[i].x;
-        tmp_y = snake[i].y;
-
-        if (snake[i].x == map[tmp_x] && snake[i].y == map[tmp_y]) {
-            map[tmp_y][tmp_x] = '0';
-        }
+        map[snake[i].x][snake[i].y] = 'O';
     }
 }
 

@@ -8,11 +8,11 @@ C++_TYPE = -std=c++11
 
 NCURSES = -lncurses
 
-HEADER = ncurses.hpp
+HEADER = Ncurses.hpp
 
 SRC_PATH = ../Src/
 
-SRC = $(SRC_PATH)libs.cpp ncurses.cpp
+SRC = $(SRC_PATH)libs.cpp Ncurses.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
