@@ -1,5 +1,5 @@
-#ifndef NCURSES_HPP
-#define NCURSES_HPP
+#ifndef NCLIB_HPP
+#define NCLIB_HPP
 
 #include <ncurses.h>
 

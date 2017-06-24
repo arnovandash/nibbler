@@ -46,7 +46,8 @@ Game &Game::operator=(Game const &src) {
 void Game::initialise()
 {
 	current_lib = 5;
-	load_lib("ncLib/ncurses.so");
+//	load_lib("ncLib/ncLib.so");
+	load_lib("sdlLib/sdlLib.so");
 }
 
 void Game::change_lib(int &ret_tmp) {

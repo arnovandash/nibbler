@@ -21,6 +21,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER)
 	make -C ./ncLib/
+	make -C ./sdlLib/
 
 	$(CLANG) $(CFLAGS) $(C++_TYPE) -o $(NAME) $(OBJ) -ldl
 

@@ -1,6 +1,6 @@
 CLANG =	clang++
 
-NAME = ncurses.so
+NAME = ncLib.so
 
 CFLAGS = -Wall -Werror -Wextra
 
@@ -8,11 +8,11 @@ C++_TYPE = -std=c++11
 
 NCURSES = -lncurses
 
-HEADER = Ncurses.hpp
+HEADER = ncLib.hpp
 
 SRC_PATH = ../src/
 
-SRC = $(SRC_PATH)libs.cpp Ncurses.cpp
+SRC = $(SRC_PATH)libs.cpp ncLib.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

@@ -1,4 +1,4 @@
-#include "Ncurses.hpp"
+#include "ncLib.hpp"
 
 extern "C" dynamic_libs *create() {
 	return (new ncurses);
@@ -48,8 +48,6 @@ bool	ncurses::Init() {
 
 void ncurses::Render()
 {
-	mvprintw(1,1,"sssssssssssssssss");
-	std::cout << "test" << std::endl;
 }
 
 int ncurses::Input(int &lib)
