@@ -12,36 +12,36 @@ Part::Part() {
 }
 
 Game::Game() {
-    screenWidth = 0;
-    screenHeight = 0;
-    current_lib = 0;
-    lib_closed = true;
-    GLibHandler = NULL;
-    gameRun = false;
+	screenWidth = 0;
+	screenHeight = 0;
+	current_lib = 0;
+	lib_closed = true;
+	GLibHandler = NULL;
+	gameRun = false;
 
-    std::cout << "Game constructor called" << std::endl;
+	std::cout << "Game constructor called" << std::endl;
 }
 
 Game::Game(unsigned int width, unsigned int height) {
-    screenWidth = width;
-    screenHeight = height;
-    std::cout << "Game x y constructor called" << std::endl;
+	screenWidth = width;
+	screenHeight = height;
+	std::cout << "Bummer dude, your Gunther rank is: " << score << std::endl;
 }
 
 Game::Game(Game const &src) {
-    *this = src;
+	*this = src;
 }
 
 Game::~Game() {
-        std::cout << "Game destructor called" << std::endl;
+	std::cout << "Game destructor called" << std::endl;
 }
 
 Game &Game::operator=(Game const &src) {
-    screenWidth = src.screenWidth;
-    screenHeight = src.screenHeight;
-    current_lib = src.current_lib;
+	screenWidth = src.screenWidth;
+	screenHeight = src.screenHeight;
+	current_lib = src.current_lib;
 
-    return (*this);
+	return (*this);
 }
 void Game::initialise()
 {
@@ -49,20 +49,20 @@ void Game::initialise()
 	food.y=0;
 	for(int i=0;i<5;i++)
 		snake.push_back(Part(i + screenWidth / 2,screenHeight / 2));
-
 	gameRun = true;
 	pause = false;
 	keyPress = 0;
 	score = 0;
-	delay = 70000; // ncurses value 110000; sdl value 110
+	delay = 110000;
 	eat = false;
 
 	direction = 'l';
 	srand(time(NULL));
 	putfood();
-
+	// Default starting library
 	load_lib("ncLib/ncLib.so");
-//	load_lib("sdlLib/sdlLib.so");
+	//	load_lib("sdlLib/sdlLib.so");
+	//	load_lib("partyLib/sdlLib.so");
 }
 
 void Game::runGame() {
@@ -71,13 +71,12 @@ void Game::runGame() {
 			if (collision()) {
 				gameRun = false;
 			}
-			usleep(delay);
 			movesnake();
 		}
+		usleep(delay);
 		keyPress = lib->Render(food.x, food.y, snake);
 		parseKey(keyPress);
 	}
-
 	if(!lib_closed && !gameRun)
 		close_lib();
 }
@@ -86,16 +85,16 @@ void Game::runGame() {
 void Game::putfood()
 {
 	while(1) {
-		int tmpx = rand() % screenWidth; // +1 for ncurses
-		int tmpy = rand() % screenHeight; // +1 for ncurses
+		unsigned int tmpx = (rand() % screenWidth -3);
+		unsigned int tmpy = (rand() % screenHeight -3);
 
-		for(unsigned long i = 0; i < snake.size(); i++)
+		for(unsigned int i = 0; i < snake.size(); i++)
 			if(snake[i].x == tmpx && snake[i].y == tmpy)
 				continue;
 		if(tmpx >= screenWidth - 2 || tmpy >= screenHeight - 3)
 			continue;
-		food.x = tmpx;
-		food.y = tmpy;
+		food.x = tmpx + 1;
+		food.y = tmpy + 1;
 		break;
 	}
 }
@@ -138,16 +137,19 @@ void Game::parseKey(int key) {
 				direction = 'r';
 			break;
 		case 5:
+			pause = true;
 			close_lib();
 			load_lib("ncLib/ncLib.so");
 			break;
 		case 6:
+			pause = true;
 			close_lib();
 			load_lib("sdlLib/sdlLib.so");
 			break;
 		case 7:
-			close_lib();// Will become sdl with sprites
-			load_lib("sdlLib/sdlLib.so");
+			pause = true;
+			close_lib();
+			load_lib("partyLib/sdlLib.so");
 			break;
 		case 8:
 			gameRun = false;
@@ -210,8 +212,8 @@ bool Game::collision()
 		eat = true;
 		putfood();
 		score+=10;
-		//		if((score % 100) == 0)
-		//			delay -= 10000;
+		if((score % 30) == 0)
+			delay -= 10000;
 	}
 	else
 		eat = false;

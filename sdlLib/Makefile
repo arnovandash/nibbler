@@ -1,6 +1,6 @@
 CLANG =	clang++
 
-NAME = sdl.so
+NAME = sdlLib.so
 
 CFLAGS = -Wall -Werror -Wextra
 
@@ -10,11 +10,11 @@ SDL_lIBS = $(shell sdl2-config --libs)
 
 SDL_CFLAGS = $(shell sdl2-config --cflags)
 
-HEADER = sdl.hpp
+HEADER = sdlLib.hpp
 
-SRC_PATH = ../Src/
+SRC_PATH = ../src/
 
-SRC = $(SRC_PATH)libs.cpp sdl.cpp
+SRC = $(SRC_PATH)libs.cpp sdlLib.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -24,7 +24,7 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER)
-	$(CLANG) $(CFLAGS) $(SDL_lIBS) -lSDL2_ttf -shared -Qunused-arguments -o $(NAME) $(OBJ)
+	$(CLANG) $(CFLAGS) $(SDL_lIBS) -shared -Qunused-arguments -o $(NAME) $(OBJ)
 
 sdl2:
 	brew install SDL2

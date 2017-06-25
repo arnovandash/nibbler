@@ -1,19 +1,30 @@
-CXX = clang++
-CXXFLAGS = -Wall -Werror -Wextra -g
-CXXXFLAGS = -Wall -Werror -Wextra -lncurses -g
-NAME = nibbler 
+CLANG =	g++
 
-SRC = src/main.cpp src/Window.cpp src/snake.cpp
+NAME = Nibbler
+
+CFLAGS = -Wall -Werror -Wextra -g
+
+C++_TYPE = -std=c++11
+
+HEADER = ./inc/
+
+SRC_PATH = ./src/
+
+SRC = $(SRC_PATH)main.cpp $(SRC_PATH)libs.cpp $(SRC_PATH)Game.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
+%.o: %.cpp
+	$(CLANG) -c $(CFLAGS) $(C++_TYPE) $< -o $@
+
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CXX) $(CXXXFLAGS) -o $(NAME) $(OBJ)
+$(NAME): $(OBJ) $(HEADER)
+	make -C ./ncLib/
+	make -C ./sdlLib/
+	make -C ./partyLib/
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+	$(CLANG) $(CFLAGS) $(C++_TYPE) -o $(NAME) $(OBJ) -ldl
 
 clean:
 	rm -rf $(OBJ)
@@ -22,3 +33,20 @@ fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
+	make -C ./ncLib/ re
+	make -C ./sdlLib/ re
+	make -C ./partyLib/ re
+
+
+libs:
+	make -C ./ncLib/
+	make -C ./sdlLib/
+	make -C ./partyLib/
+
+
+lib_clean:
+	make -C ./ncuLib/ fclean
+	make -C ./sdlLib/ fclean
+	make -C ./partyLib/ fclean
+
+c_e: fclean lib_clean
