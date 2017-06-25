@@ -10,9 +10,10 @@ class dynamic_libs
         // virtual void    Render();
         // virtual int     Input(int &dir, int &lib);
 
-        virtual bool    Init() = 0;
-        virtual int    Render() = 0;
-        virtual int     Input(int &lib) = 0;
+        virtual bool    Init(int Width, int Height) = 0;
+        
+		virtual int    Render(int foodX, int foodY) = 0;
+//        virtual int     Input(int &lib) = 0;
 };
 
 typedef                 dynamic_libs* create_t();

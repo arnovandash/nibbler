@@ -12,11 +12,10 @@ class sdl : public dynamic_libs {
 
 	private:
 
-
 		int 			max_width;
 		int 			max_height;
-		int 			stdscr_x;
-		int 			stdscr_y;
+		int 			screenWidth;
+		int 			screenHeight;
 
 	public:
 
@@ -31,9 +30,8 @@ class sdl : public dynamic_libs {
 
 		sdl &operator=(sdl const &src);
 
-		bool		Init();
-		int    	Render();
-		int    	Input(int &lib);
+		bool		Init(int Width, int Height);
+		int    	Render(int foodX, int foodY);
 };
 
 #endif

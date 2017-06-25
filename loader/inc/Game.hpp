@@ -26,9 +26,10 @@ class Game
 
 		void *		GLibHandler;
 		bool		gameRun;
+		bool		pause;
 		int		current_lib;
 		bool		lib_closed;
-
+		int			keyPress;
 		unsigned int	delay;
 		int		score;
 		bool		eat;

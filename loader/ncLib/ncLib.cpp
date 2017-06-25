@@ -11,8 +11,8 @@ extern "C" void destroy(dynamic_libs *obj) {
 ncurses::ncurses() {
 	max_width = 0;
 	max_height = 0;
-	stdscr_x = 0;
-	stdscr_y = 0;
+//	stdscr_x = 0;
+//	stdscr_y = 0;
 }
 
 ncurses::ncurses(unsigned int tmp_x, unsigned int tmp_y) {
@@ -36,20 +36,99 @@ ncurses &ncurses::operator=(ncurses const &src)
 	return (*this);
 }
 
-bool	ncurses::Init() {
+bool	ncurses::Init(int Width, int Height) {
+	screenWidth = Width;
+	screenHeight = Height;
 	initscr();
 	raw();
 	keypad(stdscr, TRUE);
 	noecho();
 	nodelay(stdscr, TRUE);
 	curs_set(FALSE);
+	wall=(char)219;
+	partchar = 'x';
+	lunch = '*';
 	return (false);
 }
 
-int ncurses::Render()
+int ncurses::Render(int foodX, int foodY)
 {
+
 	int key = getch();
-	std::cout << "Running.. " << std::endl;
+//	std::cout << "Running.. " << std::endl;
+
+	for(int i=0;i<screenWidth-1;i++) {
+		move(0,i);
+		addch(wall);
+	}
+
+	for(int i=0;i<screenHeight-1;i++) {
+		move(i,0);
+		addch(wall);
+	}
+
+	for(int i=0;i<screenWidth-1;i++) {
+		move(screenHeight-2,i);
+		addch(wall);
+	}
+
+	for(int i=0;i<screenHeight-1;i++) {
+		move(i,screenWidth-2);
+		addch(wall);
+	}
+//	for(unsigned long i=0; i<snake.size(); i++) {
+//		move(snake[i].y,snake[i].x);
+//		addch(partchar);
+//	}
+
+
+/*
+	initscr();
+	nodelay(stdscr,true);
+	keypad(stdscr,true);
+	noecho();
+	curs_set(0);
+	getmaxyx(stdscr,screenHeight,screenWidth);
+*/
+/*	
+	// main//////////////////////
+	food.x=0;
+	food.y=0;
+
+
+	for(int i=0;i<5;i++)
+		snake.push_back(snakepart(40+i,10));
+	score=0;
+	delay=110000;
+	eat=0;
+	direction='l';
+	srand(time(NULL));
+	putfood();
+///////////////////////////////////////
+*/
+
+//	move(screenHeight-1,0);
+//	printw("%d",score);
+	move(foodY,foodX);
+	addch(lunch);
+
+refresh();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	switch(key)
 	{
 		case 50:// "2" switch lib
@@ -60,6 +139,9 @@ int ncurses::Render()
 			break;
 		case 27: // "ESC" quit
 			return (8);
+			break;
+		case 32: // "ESC" quit
+			return (9);
 			break;
 	}
 	return (0);

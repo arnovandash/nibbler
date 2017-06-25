@@ -157,7 +157,7 @@ bool snakeclass::InitEverything() {
 	putfood();
 	return true;
 }
-
+/*
 bool snakeclass::InitSDL() {
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 ) {
 		std::cout << " Failed to initialize SDL : " << SDL_GetError() << std::endl;
@@ -190,7 +190,7 @@ void snakeclass::SetupRenderer() {
 	SDL_RenderSetLogicalSize( renderer, screenWidth, screenHeight );
 	SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
 }
-
+*/
 void snakeclass::RunGame() {
 	bool loop = true;
 

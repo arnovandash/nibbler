@@ -15,8 +15,12 @@ class ncurses : public dynamic_libs {
 
 		int 			max_width;
 		int 			max_height;
-		int 			stdscr_x;
-		int 			stdscr_y;
+		int 			screenWidth;
+		int 			screenHeight;
+
+		char			partchar;
+		char			wall;
+		char			lunch;
 
 	public:
 
@@ -27,8 +31,8 @@ class ncurses : public dynamic_libs {
 
 		ncurses &operator=(ncurses const &src);
 
-		bool		Init();
-		int    	Render();
+		bool		Init(int Width, int Height);
+		int    	Render(int foodX, int foodY);
 		int    	Input(int &lib);
 };
 
