@@ -11,8 +11,6 @@ extern "C" void destroy(dynamic_libs *obj) {
 ncurses::ncurses() {
 	max_width = 0;
 	max_height = 0;
-	//	stdscr_x = 0;
-	//	stdscr_y = 0;
 }
 
 ncurses::ncurses(unsigned int tmp_x, unsigned int tmp_y) {
@@ -53,17 +51,6 @@ bool	ncurses::Init(int Width, int Height) {
 
 int ncurses::Render(int foodX, int foodY, std::vector<Part> snake)
 {
-
-/*
- // Make sure terminal window is correct size.
-    getmaxyx(stdscr, max_height, max_width);
-	if (max_width < screenWidth + 10 || max_height < screenHeight) {
-		clear();
-		mvprintw(0,0, "GAME PAUSED!\nTerminal window too small. Please resize!");
-		refresh();
-		return (9);
-	}
-*/
 	int key = getch();
 	clear();
 	for(int i=0;i<screenWidth-1;i++) {
@@ -86,9 +73,6 @@ int ncurses::Render(int foodX, int foodY, std::vector<Part> snake)
 		move(snake[i].y,snake[i].x);
 		addch(partchar);
 	}
-//	move(screenHeight-1,0);
-//	printw("%d",score);
-
 	move(foodY,foodX);
 	addch(lunch);
 	switch(key)
