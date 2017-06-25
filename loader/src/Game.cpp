@@ -69,7 +69,7 @@ void Game::initialise()
 void Game::runGame() {
 	while (gameRun) {
 		if (!pause) {
-			putfood();
+//			putfood();
 			usleep(delay);
 		}
 		keyPress = lib->Render(food.x, food.y);
