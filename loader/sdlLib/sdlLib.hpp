@@ -16,6 +16,8 @@ class sdl : public dynamic_libs {
 		int 			max_height;
 		int 			screenWidth;
 		int 			screenHeight;
+		SDL_Rect		food;
+		SDL_Rect		playerCube;
 
 	public:
 

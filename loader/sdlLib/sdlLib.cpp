@@ -42,6 +42,16 @@ bool	sdl::Init(int Width, int Height) {
 	screenHeight = Height * 20;
 	int	posX = 10;
 	int	posY = 10;
+	food.w = 1;
+	food.h = 1;
+//	playerCube.x = s;
+//	playerCube.y = y;
+	playerCube.w = 1;
+	playerCube.h = 1;
+
+	for(int i = 0; i < 5; i++)
+
+
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 ) {
 		std::cout << " Failed to initialize SDL : " << SDL_GetError() << std::endl;
 		return false;
@@ -66,11 +76,12 @@ bool	sdl::Init(int Width, int Height) {
 
 int sdl::Render(int foodX, int foodY)
 {
-
+	food.x = foodX;
+	food.y = foodY;
 
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-//	SDL_RenderFillRect(renderer, &food);
+	SDL_RenderFillRect(renderer, &food);
 //	for (unsigned int i = 0; i < snake.size(); i++) {
 //		playerCube.x = snake[i].x;
 //		playerCube.y = snake[i].y;
