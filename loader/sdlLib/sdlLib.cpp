@@ -38,18 +38,10 @@ sdl &sdl::operator=(sdl const &src)
 }
 
 bool	sdl::Init(int Width, int Height) {
-
-
 	screenWidth = Width * 20;
 	screenHeight = Height * 20;
-	/////////////tmp////////////
-
 	int	posX = 10;
 	int	posY = 10;
-
-	////////////////////////////////
-
-
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 ) {
 		std::cout << " Failed to initialize SDL : " << SDL_GetError() << std::endl;
 		return false;
@@ -74,6 +66,25 @@ bool	sdl::Init(int Width, int Height) {
 
 int sdl::Render(int foodX, int foodY)
 {
+
+
+	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+//	SDL_RenderFillRect(renderer, &food);
+//	for (unsigned int i = 0; i < snake.size(); i++) {
+//		playerCube.x = snake[i].x;
+//		playerCube.y = snake[i].y;
+//		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+//		SDL_RenderFillRect(renderer, &playerCube);
+//	}
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_RenderPresent(renderer);
+	
+
+
+
+
+
 	std::cout << foodX << foodY << std::endl;
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
@@ -269,7 +280,7 @@ bool snakeclass::InitEverything() {
 	putfood();
 	return true;
 }
-/*
+
 bool snakeclass::InitSDL() {
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 ) {
 		std::cout << " Failed to initialize SDL : " << SDL_GetError() << std::endl;
@@ -302,7 +313,6 @@ void snakeclass::SetupRenderer() {
 	SDL_RenderSetLogicalSize( renderer, screenWidth, screenHeight );
 	SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
 }
-*/
 void snakeclass::RunGame() {
 	bool loop = true;
 
@@ -317,3 +327,4 @@ void snakeclass::RunGame() {
 		SDL_Delay(delay);
 	}
 }
+*/

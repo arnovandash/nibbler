@@ -62,7 +62,6 @@ void Game::initialise()
 	srand(time(NULL));
 	putfood();
 
-//	current_lib = 5;
 	load_lib("ncLib/ncLib.so");
 //	load_lib("sdlLib/sdlLib.so");
 }
