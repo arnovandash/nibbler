@@ -10,7 +10,7 @@ int main(void) {
 	height = 30;
 	width = 30;
 	game.initialise();//width, height);
-	game.RunGame();
+	game.runGame();
 
 	return 0;
 }

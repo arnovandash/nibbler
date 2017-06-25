@@ -1,5 +1,4 @@
 #include "../inc/Game.hpp"
-
 Part::Part(unsigned int col, unsigned int row) {
 	x = col;
 	y = row;
@@ -15,7 +14,6 @@ Game::Game() {
     screenHeight = 0;
     current_lib = 0;
     lib_closed = true;
-//    map = nullptr;
     GLibHandler = NULL;
     gameRun = false;
 
@@ -45,37 +43,12 @@ Game &Game::operator=(Game const &src) {
 }
 void Game::initialise()
 {
-	current_lib = 5;
+//	current_lib = 5;
 	load_lib("ncLib/ncLib.so");
 //	load_lib("sdlLib/sdlLib.so");
 }
 
-void Game::change_lib(int &ret_tmp) {
-	if (ret_tmp == 9) {
-		return ;
-	}
-	else
-		this->current_lib = ret_tmp;
-
-	close_lib();
-	switch (current_lib)
-	{
-		case 5:
-			load_lib("ncLib/ncLib.so");
-			break ;
-		case 6:
-			load_lib("sdlLib/sdlLib.so");
-			break ;
-		case 7:
-			break ;
-		case 8:
-			gameRun = false;
-			break ;
-	}
-
-}
-
-void Game::RunGame() {
+void Game::runGame() {
 	int key = 0;
 	gameRun = true;
 	while (gameRun) {
@@ -84,28 +57,49 @@ void Game::RunGame() {
 		usleep(70000);
 	}
 
-	if(!lib_closed)
+	if(!lib_closed && !gameRun)
 		close_lib();
 }
 
-void Game::parseKey(int key) {	//movesnake
+
+
+
+
+
+
+
+
+
+void Game::parseKey(int key) {
 	switch (key)
 	{
+		case 1:
+			direction = 'u';
+			break;
+		case 2:
+			direction = 'd';
+			break;
+		case 3:
+			direction = 'l';
+			break;
+		case 4:
+			direction = 'r';
+			break;
 		case 5:
 			close_lib();
 			load_lib("ncLib/ncLib.so");
-			break ;
+			break;
 		case 6:
 			close_lib();
 			load_lib("sdlLib/sdlLib.so");
 			break;
-		case 8:// TODO CLOSE CLEANLY
-			close_lib();
+		case 8:
+			gameRun = false;
+			break;
+		case 9:
+			break;
+			//pause
 	}
-	//set direction
-
-	//quit
-
 }
 
 

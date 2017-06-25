@@ -22,18 +22,22 @@ struct Part{
 class Game
 {
 	private:
+		dynamic_libs *	lib;
 
-		dynamic_libs *      lib;
+		void *		GLibHandler;
+		bool		gameRun;
+		int		current_lib;
+		bool		lib_closed;
 
-		bool                eat;
-		unsigned int        screenWidth;
-		unsigned int        screenHeight;
+		unsigned int	delay;
+		int		score;
+		bool		eat;
+		char		direction;
+		unsigned int	screenWidth;
+		unsigned int	screenHeight;
 
-		void *              GLibHandler;
-		bool                gameRun;
-		int                 current_lib;
-		bool                lib_closed;
-
+		Part		food;
+		std::vector<Part>	snake;
 
 	public:
 		Game(void);
@@ -43,23 +47,18 @@ class Game
 
 		Game &operator=(Game const &obj);
 
-
-		//      void 		        putfood();
-		//	    bool 		        collision();
-		void 	        	movesnake();
-		void                RunGame();
-
-		void               initialise();
-		//         void               LoadMap();
-		//       void               mapSymbols();
-		//     void               create_snake();
-
-
-
-
-
+		void		runGame();
+		void		initialise();
 		void		parseKey(int key);
-		void               change_lib(int &ret_tmp);
-		void               load_lib(std::string const &lib_path);
-		void               close_lib();
+		void		load_lib(std::string const &lib_path);
+		void		close_lib();
+
+		void		putfood();
+		bool		collision();
+		void		movesnake();
+
+		//void		LoadMap();
+		//void		mapSymbols();
+		//void		create_snake();
+		//void		change_lib(int &ret_tmp);
 };

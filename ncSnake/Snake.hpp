@@ -26,9 +26,11 @@ class snakeclass{
 	snakepart 	food;
 	std::vector<snakepart> snake;
 
+///////////////////////////////////
 	char 		partchar;
 	char 		wall;
 	char 		lunch;
+///////////////////////////////////
 
 	void putfood();
 	bool collision();
