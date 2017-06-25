@@ -32,7 +32,7 @@ class ncurses : public dynamic_libs {
 		ncurses &operator=(ncurses const &src);
 
 		bool		Init(int Width, int Height);
-		int    	Render(int foodX, int foodY);
+		int    	Render(int foodX, int foodY, std::vector<Part> snake);
 		int    	Input(int &lib);
 };
 

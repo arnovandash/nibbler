@@ -47,16 +47,15 @@ void Game::initialise()
 {
 	food.x=0;
 	food.y=0;
-
 	for(int i=0;i<5;i++)
-		snake.push_back(Part(i,10));
+		snake.push_back(Part(i + screenWidth / 2,screenHeight / 2));
 
 	gameRun = true;
 	pause = false;
 	keyPress = 0;
 	score = 0;
 	delay = 70000; // ncurses value 110000; sdl value 110
-	eat = 0;
+	eat = false;
 
 	direction = 'l';
 	srand(time(NULL));
@@ -69,10 +68,13 @@ void Game::initialise()
 void Game::runGame() {
 	while (gameRun) {
 		if (!pause) {
-//			putfood();
+			if (collision()) {
+				gameRun = false;
+			}
 			usleep(delay);
+			movesnake();
 		}
-		keyPress = lib->Render(food.x, food.y);
+		keyPress = lib->Render(food.x, food.y, snake);
 		parseKey(keyPress);
 	}
 
@@ -98,21 +100,42 @@ void Game::putfood()
 	}
 }
 
+void Game::movesnake() {
+	if(!eat) {
+		snake.pop_back();
+	}
+	if(direction=='l') {
+		snake.insert(snake.begin(),Part(snake[0].x-1,snake[0].y));
+	}
+	else if(direction=='r'){
+		snake.insert(snake.begin(),Part(snake[0].x+1,snake[0].y));
+	}
+	else if(direction=='u'){
+		snake.insert(snake.begin(),Part(snake[0].x,snake[0].y-1));
+	}
+	else if(direction=='d'){
+		snake.insert(snake.begin(),Part(snake[0].x,snake[0].y+1));
+	}
+}
 
 void Game::parseKey(int key) {
 	switch (key)
 	{
 		case 1:
-			direction = 'u';
+			if (direction != 'd')
+				direction = 'u';
 			break;
 		case 2:
-			direction = 'd';
+			if (direction != 'u')
+				direction = 'd';
 			break;
 		case 3:
-			direction = 'l';
+			if (direction != 'r')
+				direction = 'l';
 			break;
 		case 4:
-			direction = 'r';
+			if (direction != 'l')
+				direction = 'r';
 			break;
 		case 5:
 			close_lib();
@@ -131,14 +154,9 @@ void Game::parseKey(int key) {
 			break;
 		case 9:
 			pause ? pause = false : pause = true;
-		/*	if (pause == true)
-				pause = false;
-			else 
-				pause = true;*/
 			break;
 	}
 }
-
 
 void Game::load_lib(std::string const &lib_path) {
 	GLibHandler = dlopen(lib_path.c_str(), RTLD_LAZY);
@@ -179,127 +197,27 @@ void Game::close_lib() {
 	lib_closed = true;
 }
 
-
-
-
-
-
-
-/*
- *
-#include "Snake.hpp"
-#include <cstdlib>
-#include <unistd.h>
-
-using namespace std;
-snakepart::snakepart(int col,int row) {
-x=col;
-y=row;
-}
-
-snakepart::snakepart() {
-x=0;
-y=0;
-}
-
-
-void snakeclass::putfood()
+bool Game::collision()
 {
-while(1) {
-int tmpx = rand() % screenWidth + 1;
-int tmpy = rand() % screenHeight + 1;
+	if(snake[0].x == 0 || snake[0].x == screenWidth - 1 || snake[0].y == 0 || snake[0].y == screenHeight - 2)
+		return true;
 
-for(unsigned long i = 0; i < snake.size(); i++)
-if(snake[i].x == tmpx && snake[i].y == tmpy)
-continue;
-if(tmpx >= screenWidth - 2 || tmpy >= screenHeight - 3)
-continue;
-food.x = tmpx;
-food.y = tmpy;
-break;
-}
-move(food.y, food.x);
-addch(lunch);
-refresh();
-}
-
-bool snakeclass::collision()
-{
-if(snake[0].x == 0 || snake[0].x == screenWidth - 1 || snake[0].y == 0 || snake[0].y == screenHeight - 2)
-return true;
-
-for(unsigned long i = 2; i < snake.size(); i++) {
-if(snake[0].x == snake[i].x && snake[0].y == snake[i].y)
-return true;
+	for(unsigned long i = 2; i < snake.size(); i++) {
+		if(snake[0].x == snake[i].x && snake[0].y == snake[i].y)
+			return true;
+	}
+	if(snake[0].x==food.x && snake[0].y==food.y) {
+		eat = true;
+		putfood();
+		score+=10;
+		//		if((score % 100) == 0)
+		//			delay -= 10000;
+	}
+	else
+		eat = false;
+	return false;
 }
 
-if(snake[0].x==food.x && snake[0].y==food.y) {
-eat = true;
-putfood();
-score+=10;
-
-move(screenHeight-1,0);
-printw("%d",score);
-
-if((score % 100) == 0)
-delay -= 10000;
-}
-else
-eat = false;
-return false;
-}
-
-
-void snakeclass::movesnake() {
-
-int tmp=getch();
-switch(tmp)
-{
-case KEY_LEFT:
-if(direction!='r')
-direction='l';
-break;
-case KEY_UP:
-if(direction!='d')
-direction='u';
-break;
-case KEY_DOWN:
-if(direction!='u')
-direction='d';
-break;
-case KEY_RIGHT:
-if(direction!='l')
-direction='r';
-break;
-case KEY_BACKSPACE:
-direction='q';
-break;
-}
-
-if(!eat) {
-	move(snake[snake.size()-1].y,snake[snake.size()-1].x);
-	printw(" ");
-	refresh();
-	snake.pop_back();
-}
-if(direction=='l') {
-	snake.insert(snake.begin(),snakepart(snake[0].x-1,snake[0].y));
-}
-else if(direction=='r'){
-	snake.insert(snake.begin(),snakepart(snake[0].x+1,snake[0].y));
-
-}
-else if(direction=='u'){
-	snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y-1));
-}
-else if(direction=='d'){
-	snake.insert(snake.begin(),snakepart(snake[0].x,snake[0].y+1));
-}
-move(snake[0].y,snake[0].x);
-addch(partchar);
-refresh();
-}
-*/
 
 
 

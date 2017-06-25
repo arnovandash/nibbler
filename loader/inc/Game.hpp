@@ -11,33 +11,33 @@
 #include <term.h>
 #include "libs.hpp"
 
-
-struct Part{
-	unsigned int     x;
-	unsigned int     y;
-	Part(unsigned int col, unsigned int row);
-	Part();
-};
-
+/*
+   struct Part{
+   unsigned int     x;
+   unsigned int     y;
+   Part(unsigned int col, unsigned int row);
+   Part();
+   };
+   */
 class Game
 {
 	private:
 		dynamic_libs *	lib;
 
-		void *		GLibHandler;
-		bool		gameRun;
-		bool		pause;
-		int		current_lib;
-		bool		lib_closed;
-		int			keyPress;
-		unsigned int	delay;
-		int		score;
-		bool		eat;
-		char		direction;
-		unsigned int	screenWidth;
-		unsigned int	screenHeight;
+		void *				GLibHandler;
+		bool				gameRun;
+		bool				pause;
+		int					current_lib;
+		bool				lib_closed;
+		int					keyPress;
+		unsigned int		delay;
+		int					score;
+		bool				eat;
+		char				direction;
+		unsigned int		screenWidth;
+		unsigned int		screenHeight;
 
-		Part		food;
+		Part				food;
 		std::vector<Part>	snake;
 
 	public:

@@ -33,7 +33,7 @@ class sdl : public dynamic_libs {
 		sdl &operator=(sdl const &src);
 
 		bool		Init(int Width, int Height);
-		int    	Render(int foodX, int foodY);
+		int    	Render(int foodX, int foodY, std::vector<Part> snake);
 };
 
 #endif

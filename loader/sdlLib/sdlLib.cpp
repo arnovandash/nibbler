@@ -74,7 +74,7 @@ bool	sdl::Init(int Width, int Height) {
 	return (false);
 }
 
-int sdl::Render(int foodX, int foodY)
+int sdl::Render(int foodX, int foodY, std::vector<Part> snake)
 {
 	food.x = foodX;
 	food.y = foodY;
@@ -82,41 +82,30 @@ int sdl::Render(int foodX, int foodY)
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderFillRect(renderer, &food);
-//	for (unsigned int i = 0; i < snake.size(); i++) {
-//		playerCube.x = snake[i].x;
-//		playerCube.y = snake[i].y;
-//		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-//		SDL_RenderFillRect(renderer, &playerCube);
-//	}
+	for (unsigned int i = 0; i < snake.size(); i++) {
+		playerCube.x = snake[i].x;
+		playerCube.y = snake[i].y;
+		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+		SDL_RenderFillRect(renderer, &playerCube);
+	}
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 	SDL_RenderPresent(renderer);
-	
-
-
-
-
-
-	std::cout << foodX << foodY << std::endl;
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
 		if(event.type == SDL_KEYDOWN) {
 			switch(event.key.keysym.sym)
 			{
-				case SDLK_LEFT:
-					//	if(direction != 'r')
-					//		direction='l';
-					break;
 				case SDLK_UP:
-					//	if(direction !='d')
-					//		direction ='u';
+					return (1);
 					break;
 				case SDLK_DOWN:
-					//	if(direction != 'u')
-					//		direction='d';
+					return (2);
+					break;
+				case SDLK_LEFT:
+					return (3);
 					break;
 				case SDLK_RIGHT:
-					//	if(direction != 'l')
-					//		direction='r';
+					return (4);
 					break;
 				case SDLK_1:
 					return(5);
@@ -135,85 +124,84 @@ int sdl::Render(int foodX, int foodY)
 	return (0);
 }
 
-
 /*
 #include "Snake.hpp"
 
 snakepart::snakepart(int col, int row) {
-	x = col;
-	y = row;
+x = col;
+y = row;
 }
 
 snakepart::snakepart() {
-	x = 0;
-	y = 0;
+x = 0;
+y = 0;
 }
 
 snakeclass::snakeclass(int x, int y) {
-	
 
-	playerCube.x = x;
-	playerCube.y = y;
-	playerCube.w = 20;
-	playerCube.h = 20;
 
-	for(int i = 0; i < 5; i++)
-		snake.push_back(snakepart(playerCube.x + i * 20, playerCube.y));
-	//score=0;
+playerCube.x = x;
+playerCube.y = y;
+playerCube.w = 20;
+playerCube.h = 20;
 
-	delay = 110;
-	eat = false;
-	direction = 'l';
-	srand(time(0));
-	putfood();
+for(int i = 0; i < 5; i++)
+snake.push_back(snakepart(playerCube.x + i * 20, playerCube.y));
+//score=0;
 
-	Render();
+delay = 110;
+eat = false;
+direction = 'l';
+srand(time(0));
+putfood();
+
+Render();
 }
 
 snakeclass::~snakeclass() {
-	SDL_Quit();
+SDL_Quit();
 }
 
 void snakeclass::putfood() {
-	while(1) {
-		int tmpx = (rand() % (screenWidth / 20)) * 20;
-		int tmpy = (rand() % (screenHeight / 20)) * 20;
+while(1) {
+int tmpx = (rand() % (screenWidth / 20)) * 20;
+int tmpy = (rand() % (screenHeight / 20)) * 20;
 
-		for(unsigned long i = 0; i < snake.size(); i++)
-			if(snake[i].x == tmpx && snake[i].y == tmpy)
-				continue;
-				
-		if(tmpx >= screenWidth || tmpy >= screenHeight)
-			continue;
-		food.x = tmpx;
-		food.y = tmpy;
-		food.w = 20;
-		food.h = 20;
-		break;
-	}
-	Render();
+for(unsigned long i = 0; i < snake.size(); i++)
+if(snake[i].x == tmpx && snake[i].y == tmpy)
+continue;
+
+if(tmpx >= screenWidth || tmpy >= screenHeight)
+continue;
+food.x = tmpx;
+food.y = tmpy;
+food.w = 20;
+food.h = 20;
+break;
+}
+Render();
 }
 
 bool snakeclass::collision() {
-	if(snake[0].x < 0 || snake[0].x == screenWidth || snake[0].y < 0 || snake[0].y == screenHeight)
-		return true;
+if(snake[0].x < 0 || snake[0].x == screenWidth || snake[0].y < 0 || snake[0].y == screenHeight)
+return true;
 
-	for(unsigned long i = 2; i < snake.size(); i++)
-		if(snake[0].x == snake[i].x && snake[i].y == snake[0].y)
-			return true;
-	
-	if(snake[0].x == food.x && snake[0].y == food.y) {
-		eat = true;
-		putfood();
-		score += 10;
+for(unsigned long i = 2; i < snake.size(); i++)
+if(snake[0].x == snake[i].x && snake[i].y == snake[0].y)
+return true;
 
-		if((score % 100) == 0)
-			delay -= 10;
+if(snake[0].x == food.x && snake[0].y == food.y) {
+eat = true;
+putfood();
+score += 10;
+
+if((score % 100) == 0)
+	delay -= 10;
 	}
-	
-	else
-		eat = false;
-	return false;
+
+else
+eat = false;
+return false;
 }
 
 void snakeclass::movesnake() {
@@ -250,7 +238,7 @@ void snakeclass::movesnake() {
 		Render();
 		snake.pop_back();
 	}
-	
+
 
 	if(direction=='l')
 		snake.insert(snake.begin(), snakepart(snake[0].x - 20, snake[0].y));
@@ -276,7 +264,7 @@ void snakeclass::Render() {
 	}
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 	SDL_RenderPresent(renderer);
-	
+
 }
 
 bool snakeclass::InitEverything() {

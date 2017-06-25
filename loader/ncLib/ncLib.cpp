@@ -11,8 +11,8 @@ extern "C" void destroy(dynamic_libs *obj) {
 ncurses::ncurses() {
 	max_width = 0;
 	max_height = 0;
-//	stdscr_x = 0;
-//	stdscr_y = 0;
+	//	stdscr_x = 0;
+	//	stdscr_y = 0;
 }
 
 ncurses::ncurses(unsigned int tmp_x, unsigned int tmp_y) {
@@ -51,124 +51,68 @@ bool	ncurses::Init(int Width, int Height) {
 	return (false);
 }
 
-int ncurses::Render(int foodX, int foodY)
+int ncurses::Render(int foodX, int foodY, std::vector<Part> snake)
 {
-
 	int key = getch();
-//	std::cout << "Running.. " << std::endl;
-
+	clear();
 	for(int i=0;i<screenWidth-1;i++) {
 		move(0,i);
 		addch(wall);
 	}
-
 	for(int i=0;i<screenHeight-1;i++) {
 		move(i,0);
 		addch(wall);
 	}
-
 	for(int i=0;i<screenWidth-1;i++) {
 		move(screenHeight-2,i);
 		addch(wall);
 	}
-
 	for(int i=0;i<screenHeight-1;i++) {
 		move(i,screenWidth-2);
 		addch(wall);
 	}
-//	for(unsigned long i=0; i<snake.size(); i++) {
-//		move(snake[i].y,snake[i].x);
-//		addch(partchar);
-//	}
+	for(unsigned long i=0; i<snake.size(); i++) {
+		move(snake[i].y,snake[i].x);
+		addch(partchar);
+	}
 
+	// CHECK TERMINAL SIZE
+	//	getmaxyx(stdscr,screenHeight,screenWidth);
 
-/*
-	initscr();
-	nodelay(stdscr,true);
-	keypad(stdscr,true);
-	noecho();
-	curs_set(0);
-	getmaxyx(stdscr,screenHeight,screenWidth);
-*/
-/*	
-	// main//////////////////////
-	food.x=0;
-	food.y=0;
-
-
-	for(int i=0;i<5;i++)
-		snake.push_back(snakepart(40+i,10));
-	score=0;
-	delay=110000;
-	eat=0;
-	direction='l';
-	srand(time(NULL));
-	putfood();
-///////////////////////////////////////
-*/
-
-//	move(screenHeight-1,0);
-//	printw("%d",score);
+	//	move(screenHeight-1,0);
+	//	printw("%d",score);
+	
 	move(foodY,foodX);
 	addch(lunch);
-
-refresh();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	switch(key)
 	{
+		case KEY_UP:
+			return (1);
+			break;
+		case KEY_DOWN:
+			return (2);
+			break;
+		case KEY_LEFT:
+			return (3);	
+			break;
+		case KEY_RIGHT:
+			return (4);
+			break;
 		case 50:// "2" switch lib
 			return (6);
 			break;
 		case 51:// "3" switch lib
 			return (7);
 			break;
-		case 27: // "ESC" quit
+		case 27: // ESC to quit
 			return (8);
 			break;
-		case 32: // "ESC" quit
+		case 32: // SPACE to pause
 			return (9);
 			break;
 	}
-	return (0);
-}
-
-int ncurses::Input(int &lib)
-{
-	int tmp = getch();
-	switch(tmp)
-	{
-		case 49:
-			if (lib != 5)
-				return (5);
-			break ;
-		case 50:
-			if (lib != 6)
-				return (6);
-			break ;
-		case 51:
-			if (lib != 7)
-				return (7);
-			break ;
-		case 27:
-			return (8);
-		case 32:
-			return (9);
-	}
+	
+	refresh();
 	return (0);
 }
 
