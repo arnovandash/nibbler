@@ -12,8 +12,8 @@ Part::Part() {
 }
 
 Game::Game() {
-    screenWidth = 30;
-    screenHeight = 30;
+    screenWidth = 0;
+    screenHeight = 0;
     current_lib = 0;
     lib_closed = true;
     GLibHandler = NULL;
