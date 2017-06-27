@@ -11,6 +11,14 @@
 #include <term.h>
 #include "libs.hpp"
 
+/*
+   struct Part{
+   unsigned int     x;
+   unsigned int     y;
+   Part(unsigned int col, unsigned int row);
+   Part();
+   };
+   */
 class Game
 {
 	private:
@@ -21,9 +29,10 @@ class Game
 		bool				pause;
 		int					current_lib;
 		bool				lib_closed;
+		bool				gunther;
 		int					keyPress;
 		unsigned int		delay;
-		int					score;
+		unsigned int		score;
 		bool				eat;
 		char				direction;
 		unsigned int		screenWidth;
@@ -49,4 +58,9 @@ class Game
 		void		putfood();
 		bool		collision();
 		void		movesnake();
+
+		//void		LoadMap();
+		//void		mapSymbols();
+		//void		create_snake();
+		//void		change_lib(int &ret_tmp);
 };

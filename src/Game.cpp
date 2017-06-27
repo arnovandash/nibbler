@@ -14,18 +14,16 @@ Part::Part() {
 Game::Game() {
 	screenWidth = 0;
 	screenHeight = 0;
+	score = 0;
 	current_lib = 0;
 	lib_closed = true;
 	GLibHandler = NULL;
 	gameRun = false;
-
-	std::cout << "Game constructor called" << std::endl;
 }
 
 Game::Game(unsigned int width, unsigned int height) {
 	screenWidth = width;
 	screenHeight = height;
-	std::cout << "Bummer dude, your Gunther rank is: " << score << std::endl;
 }
 
 Game::Game(Game const &src) {
@@ -33,7 +31,10 @@ Game::Game(Game const &src) {
 }
 
 Game::~Game() {
-	std::cout << "Game destructor called" << std::endl;
+	if (gunther)
+		std::cout << "Bummer dude, your Gunther rank is: " << score << std::endl;
+	else
+		std::cout << "Bummer dude, your score is: " << score << std::endl;
 }
 
 Game &Game::operator=(Game const &src) {
@@ -51,6 +52,7 @@ void Game::initialise()
 		snake.push_back(Part(i + screenWidth / 2,screenHeight / 2));
 	gameRun = true;
 	pause = false;
+	gunther = false;
 	keyPress = 0;
 	score = 0;
 	delay = 110000;
@@ -148,7 +150,9 @@ void Game::parseKey(int key) {
 			break;
 		case 7:
 			pause = true;
+			gunther = true;
 			close_lib();
+			delay = 40000;
 			load_lib("partyLib/sdlLib.so");
 			break;
 		case 8:
@@ -211,7 +215,10 @@ bool Game::collision()
 	if(snake[0].x==food.x && snake[0].y==food.y) {
 		eat = true;
 		putfood();
-		score+=10;
+		if (!gunther)
+			score += 10;
+		else
+			score += 50;
 		if((score % 30) == 0)
 			delay -= 10000;
 	}
